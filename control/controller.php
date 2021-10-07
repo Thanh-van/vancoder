@@ -7,7 +7,8 @@ class Control
 {
 	public function destination()
 	{
-		include_once 'view/font-end/index.php';
+		
+		
 		if(isset($_GET['url'])){
 			switch($_GET['url']){
 				case 'admin':{
@@ -17,10 +18,16 @@ class Control
 					break;
 				}
 				case 'font':{
-					
+					include_once 'base.php';
+					$control = new Base();
+					$control -> view();
 					break;
 				}
 			}
+		}else{
+			include_once 'base.php';
+			$control = new Base();
+			$control -> view();
 		}
 	}
 }

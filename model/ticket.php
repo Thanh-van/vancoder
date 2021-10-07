@@ -8,9 +8,14 @@ class Ticket extends Basemodel{
 	}
     
     
-    public function get_ticket($array = null , $k = null)
+    public function get_ticket($array = null , $k = null,$sql = null)
     {
-        $data = $this->admin->Select("ticket ",$array , $k);
+        $data = $this->admin->Select("ticket ",$array , $k,$sql);
+        return $data;
+    }
+    public function select_like_ticket($sql)
+    {
+        $data = $this->admin->Select_like("ticket ",$sql);
         return $data;
     }
     public function d_ticket($id)
