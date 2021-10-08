@@ -40,7 +40,7 @@
             <div class="list-group">
                 <a href="<?= (isset($_GET['view'])) ? strstr(param, "&", true) : param ?>&view=catalog" class="list-group-item list-group-item-action border-0 pl-5">Category</a>
                 <a href="<?= (isset($_GET['view'])) ? strstr(param, "&", true) : param ?>&view=post" class="list-group-item list-group-item-action border-0 pl-5">Posts</a>
-                <a href="#" class="list-group-item list-group-item-action border-0 pl-5">Comment</a>
+                <a href="<?= (isset($_GET['view'])) ? strstr(param, "&", true) : param ?>&view=bill" class="list-group-item list-group-item-action border-0 pl-5">Bill</a>
             </div>
         </div>
     </div>

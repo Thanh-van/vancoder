@@ -49,6 +49,7 @@ class Basemodel
 	public function INSERT($table,$data)
 	{
 		$str="INSERT INTO " .$table . " " . $this->query_insert($data);
+		echo $str;
 		$data = $this->str_connect->query($str);
 		return $data;
 	}
@@ -60,6 +61,7 @@ class Basemodel
 	public function Update($table,$data,$id)
 	{
 		$str="UPDATE ". $table . " " . $this->query_update($data,$id);
+		echo $str;
 		$data = $this->str_connect->query($str);
 		return $data;
 	}

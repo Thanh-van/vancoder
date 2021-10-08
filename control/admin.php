@@ -6,6 +6,21 @@
 session_start();
 class Admin
 {
+    function __construct()
+	{
+		if(isset($_SESSION['user']) ){
+            if($_SESSION['user']['level'] != 0)
+                header('Location: '. host .'/'. name_project);
+        }else{
+            header('Location: '. host .'/'. name_project);
+        }
+	}
+    
+    public function log_out(){
+        unset($_SESSION['user']);
+        header('Location: '. host .'/'. name_project);
+        die;
+    }
 	public function view()
 	{
         if(isset($_GET['view'])){
@@ -105,6 +120,47 @@ class Admin
             'category' =>  $category->get__all()
         );
         View::get_layout("post_detail",$data);
+    }
+    public function bill()
+    {
+        $bill = View::get__model('bill');
+        $ticket = View::get__model('ticket');
+        $bill_data = $bill -> get_bill();
+        $product = array();
+        $arr = array();
+        foreach ($bill_data as $item => $key) {
+            $arr = $ticket->get_ticket(
+                array(
+                    'id' => $key['id_ticket']
+                )
+            );
+            array_push($product,$arr);
+        }
+        $user = View::get__model('user');
+        $user_data = array();
+        foreach ($bill_data as $item => $key) {
+            $arr = $user->get_user(
+                array(
+                    'id' => $key['id_user']
+                )
+            );
+            array_push($user_data,$arr);
+        }
+        $data = array(
+            'bill' => $bill_data,
+            'ticket' => $product,
+            'user' => $user_data
+        );
+        if(isset($_GET['key']))
+        {
+            if($_GET['key'] == "duyet")
+                $bill ->update_bill_tt(1,$_GET['id']);
+            if($_GET['key'] == "huy")
+            $bill ->update_bill_tt(2,$_GET['id']);
+            
+            header('Location: ?url=admin&view=bill');
+        }
+        View::get_layout("bill",$data);
     }
 }
 

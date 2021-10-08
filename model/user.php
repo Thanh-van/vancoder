@@ -29,6 +29,30 @@ class User extends Basemodel{
         );
         $data =  $this->admin->Update('user',$array,$POST['id']);
     }
+    public function update_user_custom($POST)
+    {
+        $array = array(
+            'user' => $POST['user'],
+            'pass' => $POST['pass'],
+            'phone' => $POST['phone'],
+            'address' => $POST['address'],
+            'img' => null,
+            'level' => 1
+        );
+        $data =  $this->admin->Update('user',$array,$POST['id']);
+    }
+    public function add_user_custom($POST)
+    {
+        $array = array(
+            'user' => $POST['user'],
+            'pass' => $POST['pass'],
+            'phone' => $POST['phone'],
+            'address' => $POST['address'],
+            'img' => null,
+            'level' => 1
+        );
+        $data =  $this->admin->INSERT('user',$array);
+    }
     public function add_user($POST)
     {
         $array = array(

@@ -6,7 +6,13 @@
 session_start();
 class Base
 {
-    
+    function __construct()
+	{
+		if(isset($_SESSION['user']) && $_SESSION['user']['level'] == 0) {
+            header('Location: '. host .'/'. name_project . '?url=admin');
+            die;
+        }
+	}
     public function view()
     {
         if (isset($_GET['view'])) {
@@ -125,4 +131,135 @@ class Base
         );
         include_once view_font.'index.php';
     }
+    public function login(){
+        $model = View::get__model('user');
+        if(isset($_POST['password'])){
+            $user = $model->get_user(
+                array(
+                'user' => $_POST['email'],
+                'pass' => $_POST['password']
+            ));
+            
+            if($user != 0 )
+            {
+                $user = $user[0];
+                $_SESSION['user'] = $user;
+                header('Location: '. host .'/'. name_project . '?url=admin');
+            }else{
+                echo "false";
+            }
+            
+        }
+        
+        include_once view_font.'login/index.php';
+    }
+    public function add_acc()
+    {
+        $model = View::get__model('user');
+        if( isset($_POST['login']) ){
+            $model->add_user_custom($_POST);
+            header('Location: '. host .'/'. name_project . '?view=login');
+        } 
+       
+        include_once view_font.'login/new.php';
+    }
+    public function log_out(){
+        session_destroy();
+        header('Location: '. host .'/'. name_project . '?view=login');
+    }
+    public function ticker_detail()
+    {
+        if(isset($_GET['id']))
+        {
+            $ticket_md = View::get__model('ticket');
+            $post = $ticket_md->get_ticket(
+                array(
+                    'id' => $_GET['id'],
+                )
+            );
+            $data = array(
+                'ticker' => $post
+            );
+            
+            include_once view_font.'ticker_detail.php';
+        }else{
+            header('Location: '. host .'/'. name_project . '?view=ticker');
+        }
+        
+    }
+    public function cart_site()
+    {
+        if(isset($_POST['id_ticket'])){
+            $ticket_md = View::get__model('ticket');
+            $bill = View::get__model('bill');
+            $get_bill = $bill -> get_bill(
+                array(
+                    'id_user' => $_SESSION['user']['id'],
+                    'id_ticket' => $_POST['id_ticket']
+                )
+            );
+            $array = array(
+                'id_user' => $_SESSION['user']['id'],
+                'id_ticket' => $_POST['id_ticket'],
+                'quantity' => $_POST['quantity'],
+                'status' => 0
+            );
+            print_r($get_bill);
+            if($get_bill == 0)
+                $check = $bill->add_bill($array);
+            else $check = $bill->update_bill(array('id' => $get_bill[0]['id'], 'quantity' => $get_bill[0]['quantity']+$_POST['quantity']));
+            if($check == true)
+            {
+                $array = array(
+                    'id' => $_POST['id_ticket'],
+                    'quantity' => $_POST['cu'] - $_POST['quantity']
+                ); 
+                $check = $ticket_md->upp_ticket_mem($array);
+                if($check == true)
+                    echo "Mua Hàng Thành Công";
+                else echo "Lỗi cập nhật số lượng";
+            }else echo "Mua Hàng Không Thành Công";
+            
+        }
+        else{
+            echo "Lỗi";
+        }
+    }
+    public function profile(){
+
+        $bill = View::get__model('bill');
+        $ticket = View::get__model('ticket');
+        $bill = $bill -> get_bill(
+            array(
+                'id_user' => $_SESSION['user']['id']
+            )
+        );
+        $product = array();
+        $arr = array();
+        foreach ($bill as $item => $key) {
+            $arr = $ticket->get_ticket(
+                array(
+                    'id' => $key['id_ticket']
+                )
+            );
+            array_push($product,$arr);
+        }
+        $data = array(
+            'bill' => $bill,
+            'ticket' => $product
+        );
+        if(isset($_POST['login'])){
+            $model = View::get__model('user');
+            if( isset($_POST['login']) ){
+                $model->update_user_custom($_POST);
+                $user = $model ->get_user(array('id'=>$_SESSION['user']['id']));
+                $user = $user[0];
+                session_reset();
+                $_SESSION['user'] = $user;
+                header('Location: '. host .'/'. name_project . '?view=profile');
+            }
+        }
+        include_once view_font.'profile.php';
+    }
+
 }

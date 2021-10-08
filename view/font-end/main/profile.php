@@ -32,62 +32,126 @@
   <div class="container">
     <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
       <div class="col-md-9 ftco-animate pb-5 text-center">
-         <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i class="fa fa-chevron-right"></i></a></span> <span>Tour List <i class="fa fa-chevron-right"></i></span></p>
-         <h1 class="mb-0 bread">Tours List</h1>
+         <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i class="fa fa-chevron-right"></i></a></span> <span>Profile <i class="fa fa-chevron-right"></i></span></p>
+         <h1 class="mb-0 bread">Profile</h1>
      </div>
  </div>
 </div>
 </section>
-
-<section class="ftco-section ftco-no-pb ftco-no-pt">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-					<div class="ftco-search ">
-						<div class="row">
-							<div class="col-md-12 nav-link-wrap">
-								<div class="nav nav-pills text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-									<a class="nav-link active mr-md-1" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Search Tour</a>
-
-
-								</div>
-							</div>
-							<div class="col-md-12 tab-wrap">
-								
-								<div class="tab-content" id="v-pills-tabContent">
-									
-									<div class="tab-pane active" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-nextgen-tab">
-										<form action="#" class="search-property-1">
-											<div class="row w-100">
-												<div class="col-md-10 d-flex">
-													<div class="form-group p-4 border-0">
-														<label for="#">Destination</label>
-														<div class="form-field">
-															<div class="icon"><span class="fa fa-search"></span></div>
-															<input type="text" id="value" class="form-control" placeholder="Search place">
-														</div>
-													</div>
-												</div>
-												<div class="col-md-2 d-flex">
-													<div class="form-group d-flex w-100 border-0">
-														<div class="form-field w-100 align-items-center d-flex">
-															<input type="submit" id="seach" value="Search" class="align-self-stretch form-control btn btn-primary">
-														</div>
-													</div>
-												</div>
-											</div>
-										</form>
-									</div>
-
-									
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-<div id="result"></div>
+<div class="d-flex">
+    <div class="container">
+        <div class="row">
+        <div class="col-md-8">
+            
+        <div class="table pt-3">
+            <h3>Your order list</h3>
+        <table class="table-view w-100">
+            <thead>
+                <tr>
+                    <td class="tb_checkbox">STT</td>
+                    <td>Title</td>
+                    <td>Khởi Hành</td>
+                    <td>Kết Thúc</td>
+                    <td>Số Lương</td>
+                    <td>Status</td>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $stt = 0; foreach($data['bill'] as $item => $key){
+                    ?>
+                     <tr>
+                        <th>
+                            <p><?= ++$stt; ?></p>
+                        </th>
+                        <th>
+                            <p><?= $data['ticket'][$item][0]['name'] ?></p>
+                        </th>
+                        <th>
+                            <p><?= $data['ticket'][$item][0]['delivery_date'] ?></p>
+                        </th>
+                        <th>
+                            <p><?= $data['ticket'][$item][0]['end_date'] ?></p>
+                        </th>
+                        <th>
+                            <p><?= $key['quantity'] ?></p>
+                        </th>
+                        <th>
+                            <p><?php if( $key['status'] ==0){
+                                echo 'Chờ xử lý';
+                            }else
+                            if( $key['status'] == 1){
+                                echo 'Đã thanh toán';
+                            }else{
+                                echo 'Hủy';
+                            }
+                             ?></p>
+                        </th>
+                    </tr>
+                    <?php
+                } ?>
+               
+            </tbody>
+            <tfoot>
+                <tr>
+                <td class="tb_checkbox">STT</td>
+                    <td>Title</td>
+                    <td>Khởi Hành</td>
+                    <td>Kết Thúc</td>
+                    <td>Số Lương</td>
+                    <td>Status</td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <div id="detail"></div>
+    </div>
+        </div>
+        <div class="card-body col-md-4">
+                <p class="login-card-description">My account</p>
+                <form method="post" class="colorlib-form">
+                <div class="row">
+                    <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="text" value="<?= $_SESSION['user']['id'] ?>" hidden name="id"  id="">
+                                <label for="fname">E-mail Address</label>
+                                <input type="mail" id="fname" class="form-control" value="<?= $_SESSION['user']['user'] ?>"  name="user" placeholder="First Name" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="companyname">Address</label>
+                                <input type="text" id="towncity" name="address" value="<?= $_SESSION['user']['address'] ?>" class="form-control" placeholder="Town or City" required>
+                             </div>
+                        </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="Phone">Phone Number</label>
+                            <input name="phone" type="text" id="zippostalcode"  value="<?= $_SESSION['user']['phone'] ?>" class="form-control" placeholder="Phone Number" required>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="companyname">Sex</label>
+                            <select name="sex" class="form-control" required>
+                                <option value="0">Nam</option>
+                                <option value="1">Nữ</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="companyname">Pass</label>
+                        <input type="password" name="pass" id="towncity" value="<?= $_SESSION['user']['pass'] ?>" name="address" class="form-control" placeholder="Town or City" required>
+                        </div>
+                        <input name="login" id="login" class="btn btn-block login-btn mb-4" type="submit" value="Edit">
+                    </div>
+                </div>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <section class="ftco-intro ftco-section ftco-no-pt">
@@ -190,35 +254,5 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
 <script src="<?= host . '/' . name_project . view_font; ?>js/google-map.js"></script>
 <script src="<?= host . '/' . name_project . view_font; ?>js/main.js"></script>
-<script>
-  $( document ).ready(function() {
-    $.ajax({
-              url : "?view=content_ticker",
-              type : "POST",
-              data : {
-                        'page' : 1,
-                    },
-              success : function (result){
-                  $('#result').html(result);
-              }
-      });
-    $('#seach').on( "click", function(e){
-		e.preventDefault();
-		console.log($("#value").val());
-      $.ajax({
-              url : "?view=content_ticker",
-              type : "POST",
-              data : {
-				  		'key' : $("#value").val(),
-                        'page' : '1',
-                    },
-              success : function (result){
-                  $('#result').html(result);
-              }
-      });
-    });
-  });
-
-</script>
 </body>
 </html>

@@ -39,55 +39,70 @@
 </div>
 </section>
 
-<section class="ftco-section ftco-no-pb ftco-no-pt">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-					<div class="ftco-search ">
-						<div class="row">
-							<div class="col-md-12 nav-link-wrap">
-								<div class="nav nav-pills text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-									<a class="nav-link active mr-md-1" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Search Tour</a>
+<div class="ticker_detail mt-5 ">
+    <div class="container">
+        <div class="row">
+            <div id="header text-center" ></div>
+            <div class="col-md-7">
+                <div class="img-full">
+                    <img class="w-100" src="<?= host . '/' . name_project . 'view/'; ?>upload/<?= $data['ticker'][0]['img'] ?>" alt="">
+                </div>
+            </div>
+            <div class="col-md-5">
+            <div class="product-desc">
+                <p class='id_ticker' data="<?= $_GET['id'] ?>" hidden></p>
+                <input type="text" hidden class="vecon" value="<?= $data['ticker'][0]['quantity'] ?>">
+                <p class="name_img" data="<?= $data['ticker'][0]['img'] ?>" hidden=""></p>
+                <h3 class="title" data="<?= $data['ticker'][0]['name'] ?>"><?= $data['ticker'][0]['name'] ?></h3>
+                <p class="id_product" data="44" hidden=""></p>
+                <p class="price" data="<?= $data['ticker'][0]['price'] ?>">
+                    <span>$<?= $data['ticker'][0]['price'] ?>.00</span>
+                </p>
 
+                <div class="size-wrap">
+                    <div class="block-26 mb-2 d-flex">
 
-								</div>
-							</div>
-							<div class="col-md-12 tab-wrap">
-								
-								<div class="tab-content" id="v-pills-tabContent">
-									
-									<div class="tab-pane active" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-nextgen-tab">
-										<form action="#" class="search-property-1">
-											<div class="row w-100">
-												<div class="col-md-10 d-flex">
-													<div class="form-group p-4 border-0">
-														<label for="#">Destination</label>
-														<div class="form-field">
-															<div class="icon"><span class="fa fa-search"></span></div>
-															<input type="text" id="value" class="form-control" placeholder="Search place">
-														</div>
-													</div>
-												</div>
-												<div class="col-md-2 d-flex">
-													<div class="form-group d-flex w-100 border-0">
-														<div class="form-field w-100 align-items-center d-flex">
-															<input type="submit" id="seach" value="Search" class="align-self-stretch form-control btn btn-primary">
-														</div>
-													</div>
-												</div>
-											</div>
-										</form>
-									</div>
-
-									
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-<div id="result"></div>
+                        <h4>Khởi Hành : <?= $data['ticker'][0]['delivery_date'] ?></h4>
+                        <h4></h4>
+                    </div>
+                    <div class="block-26 mb-4">
+                        <h4>Kết Thúc : <?= $data['ticker'][0]['end_date'] ?></h4>
+                    </div>
+                </div>
+                <div class="input-group mb-4">
+                    <input required type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="<?= $data['ticker'][0]['quantity']  ?>">
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <p class="addtocart">
+                        <?php if(isset($_SESSION['user']))
+                                {
+                                ?>
+                                <a href="cart.html" class="btn btn-primary btn-addtocart add_to_cart"><i class="icon-shopping-cart"></i> Add to Cart</a>
+                                <?php
+                                }else{
+                                ?>
+                                    <a href="?view=login" onclick="alert('Vui Lòng Đăng Nhập');" class="btn btn-primary btn-addtocart"><i class="icon-shopping-cart"></i> Add to Cart</a>
+                                <?php
+                                }
+                                ?>
+                        </p>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mt-2">
+                <h3>Description</h3>
+                <textarea class="w-100 boder ">
+                <?= $data['ticker'][0]['description'] ?>
+                </textarea>
+            </div>
+        </div>
+    </div>
+    
+</div>
 
 
 <section class="ftco-intro ftco-section ftco-no-pt">
@@ -191,34 +206,34 @@
 <script src="<?= host . '/' . name_project . view_font; ?>js/google-map.js"></script>
 <script src="<?= host . '/' . name_project . view_font; ?>js/main.js"></script>
 <script>
-  $( document ).ready(function() {
-    $.ajax({
-              url : "?view=content_ticker",
-              type : "POST",
-              data : {
-                        'page' : 1,
-                    },
-              success : function (result){
-                  $('#result').html(result);
-              }
-      });
-    $('#seach').on( "click", function(e){
-		e.preventDefault();
-		console.log($("#value").val());
-      $.ajax({
-              url : "?view=content_ticker",
-              type : "POST",
-              data : {
-				  		'key' : $("#value").val(),
-                        'page' : '1',
-                    },
-              success : function (result){
-                  $('#result').html(result);
-              }
-      });
-    });
-  });
+		$(document).ready(function(){
+		$('.add_to_cart').on('click',function(e){
+			e.preventDefault();
+			$id = $('.id_ticker').attr('data')
+			$quantity = $('.input-number').val();
+            $con = $('.vecon').val();
+            $count =  $quantity - $con;
+			if( parseInt($count) <= 0)
+			{
+				$.ajax({
+					url : "?view=cart_site",
+					type : "POST",
+					data : {
+							'id_ticket' : $id,
+							'quantity' : $quantity,
+                            'cu' :  $con
+							},
+					success : function (result){
+						$('#header').html(result);
+						alert("Thêm Thành Công");
+					}
+				});
+			}else{
+				alert('Chỉ còn lại ' + $con + ' Vé');
+			}
 
+		});
+    });
 </script>
 </body>
 </html>

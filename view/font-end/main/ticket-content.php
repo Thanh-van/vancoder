@@ -5,7 +5,7 @@
     <?php foreach($data['ticket'] as $item => $key ){ ?>
        <div class="col-md-4 ftco-animate fadeInUp ftco-animated">
           <div class="project-wrap">
-             <a href="" class="img" style="background-image: url('<?= host . '/' . name_project . 'view/'; ?>upload/<?= $key['img'] ?>');">
+             <a href="?view=ticker_detail&id=<?= $key['id']; ?>" class="img" style="background-image: url('<?= host . '/' . name_project . 'view/'; ?>upload/<?= $key['img'] ?>');">
                 <span class="price">$550/person</span>
             </a>
             <div class="text p-4">

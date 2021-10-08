@@ -24,6 +24,14 @@ class Ticket extends Basemodel{
         $data = $this->admin->Delete($query);
         return $data;
     }
+    public function upp_ticket_mem($POST)
+    {
+        $data =  $this->admin->Update('ticket',array(
+            'quantity' => $POST['quantity']
+        )
+        ,$POST['id']);
+        return $data;
+    }
     public function update_ticket($POST)
     {
         $img = $this->Move_file('img');
